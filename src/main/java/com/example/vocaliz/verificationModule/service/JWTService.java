@@ -48,7 +48,7 @@ public class JWTService {
         Claims claims = Jwts.claims();
         claims.put("email",userDetails.getUsername());
         claims.setExpiration(calendar.getTime()); // 到期時間 -> RFC 7519 標準的建議內容
-        claims.setIssuer("NoteShareBackend"); // 核發者 -> RFC 7519 標準的建議內容
+        claims.setIssuer("VocalizBackend"); // 核發者 -> RFC 7519 標準的建議內容
 
         // generate secret key
         Key secretKey = Keys.hmacShaKeyFor(KEY.getBytes());
