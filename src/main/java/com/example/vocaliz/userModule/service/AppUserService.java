@@ -58,7 +58,6 @@ public class AppUserService {
         categories.add(category);
         appUser.setCategory(categories);
         userRepository.insert(appUser);
-        // TODO: create Buy and Favorite and default folder
 
         appUser = getUserById(appUser.getUserId());
         return appUser;
