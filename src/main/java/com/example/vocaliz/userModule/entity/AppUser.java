@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.*;
 
+import java.util.*;
+
 @Data
 @Document(collection = "user")
 public class AppUser {
@@ -12,7 +14,8 @@ public class AppUser {
     String userId;
     String email;
     String password;
+    String name;
     String verifyCode;
     Boolean isActivate;
-    Category category;
+    List<Category> category;
 }
