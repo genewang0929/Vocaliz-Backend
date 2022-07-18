@@ -27,7 +27,7 @@ public class CategoryController {
                                                    @PathVariable("categoryId") String categoryId) {
         Category category = categoryService.getACategory(email, categoryId);
         Map<String, Object> map = new HashMap<>();
-        map.put("category", category);
+        map.put("category", Objects.requireNonNullElse(category, "category not found"));
         return ResponseEntity.ok(map);
     }
 
@@ -35,9 +35,9 @@ public class CategoryController {
     public ResponseEntity<Object> createACategory(@PathVariable("email") String email,
                                                   @RequestBody Map<String, String> request) {
         String categoryName = request.get("categoryName");
-        List<Category> categories = categoryService.createACategory(email, categoryName);
+        Category category = categoryService.createACategory(email, categoryName);
         Map<String, Object> map = new HashMap<>();
-        map.put("categories", categories);
+        map.put("category", category);
         return ResponseEntity.ok(map);
     }
 
@@ -46,9 +46,9 @@ public class CategoryController {
                                                   @PathVariable("categoryId") String categoryId,
                                                   @RequestBody Map<String, String> request) {
         String newCategoryName = request.get("newCategoryName");
-        List<Category> categories = categoryService.renameCategory(email, categoryId, newCategoryName);
+        Category category = categoryService.renameCategory(email, categoryId, newCategoryName);
         Map<String, Object> map = new HashMap<>();
-        map.put("categories", categories);
+        map.put("category", Objects.requireNonNullElse(category, "category not found"));
         return ResponseEntity.ok(map);
     }
 

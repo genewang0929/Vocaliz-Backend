@@ -5,6 +5,7 @@ import com.example.vocaliz.repository.*;
 import com.example.vocaliz.userModule.entity.*;
 import com.example.vocaliz.userModule.service.*;
 import com.example.vocaliz.vocabularyModule.entity.*;
+import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -32,20 +33,21 @@ public class CategoryService {
         return null;
     }
 
-    public List<Category> createACategory(String email, String categoryName) {
+    public Category createACategory(String email, String categoryName) {
         AppUser appUser = appUserService.getUserByEmail(email);
         List<Vocabulary> vocabulary = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
         Category category = new Category();
+        category.setCategoryId(new ObjectId().toString());
         category.setCategoryName(categoryName);
         category.setVocabulary(vocabulary);
         categories.add(category);
         appUser.setCategory(categories);
         userRepository.save(appUser);
-        return categories;
+        return category;
     }
 
-    public List<Category> renameCategory(String email, String categoryId, String newCategoryName) {
+    public Category renameCategory(String email, String categoryId, String newCategoryName) {
         AppUser appUser = appUserService.getUserByEmail(email);
         List<Category> categories = appUser.getCategory();
         for (int i = 0; i < categories.size(); i++) {
@@ -53,12 +55,13 @@ public class CategoryService {
             if (category.getCategoryId().equals(categoryId)) {
                 category.setCategoryName(newCategoryName);
                 categories.set(i, category);
-                break;
+                appUser.setCategory(categories);
+                userRepository.save(appUser);
+                return category;
             }
         }
-        appUser.setCategory(categories);
-        userRepository.save(appUser);
-        return categories;
+
+        return null;
     }
 
     public List<Category> deleteCategory(String email, String categoryId) {
