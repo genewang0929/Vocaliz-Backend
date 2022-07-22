@@ -74,16 +74,32 @@ public class VocabularyService {
     }
 
     public Vocabulary createVocabulary(String email, String categoryId, Vocabulary request) {
+        System.out.println(request.getWord());
+        System.out.println(request.getDefinition());
+
+
         AppUser appUser = appUserService.getUserByEmail(email);
-        Category category = categoryService.getACategory(email, categoryId);
+        List<Category> categories = appUser.getCategory();
+        Category category = new Category();
+        for (Category c : categories) {
+            if (c.getCategoryId().equals(categoryId))
+                category = c;
+        }
         Vocabulary vocabulary = new Vocabulary();
         vocabulary.setVocabularyId(new ObjectId().toString());
         vocabulary.setWord(request.getWord());
         vocabulary.setDefinition(request.getDefinition());
         vocabulary.setRankLV(0);
+        //新增至指定Category
         List<Vocabulary> vocabularyList = category.getVocabulary();
         vocabularyList.add(vocabulary);
         category.setVocabulary(vocabularyList);
+        //新增至Default Category
+        Category defaultCategory = appUser.getCategory().get(0);
+        List<Vocabulary> defaultVocabularyList = defaultCategory.getVocabulary();
+        defaultVocabularyList.add(vocabulary);
+        defaultCategory.setVocabulary(defaultVocabularyList);
+
         userRepository.save(appUser);
         return vocabulary;
     }

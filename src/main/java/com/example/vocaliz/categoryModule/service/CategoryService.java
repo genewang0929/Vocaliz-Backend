@@ -36,7 +36,7 @@ public class CategoryService {
     public Category createACategory(String email, String categoryName) {
         AppUser appUser = appUserService.getUserByEmail(email);
         List<Vocabulary> vocabulary = new ArrayList<>();
-        List<Category> categories = new ArrayList<>();
+        List<Category> categories = appUser.getCategory();
         Category category = new Category();
         category.setCategoryId(new ObjectId().toString());
         category.setCategoryName(categoryName);
