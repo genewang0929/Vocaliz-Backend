@@ -6,6 +6,7 @@ import com.example.vocaliz.repository.*;
 import com.example.vocaliz.userModule.entity.*;
 import com.example.vocaliz.userModule.service.*;
 import com.example.vocaliz.vocabularyModule.entity.*;
+import com.example.vocaliz.vocabularyModule.service.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.crossstore.*;
@@ -16,11 +17,9 @@ import java.util.*;
 @Service
 public class CategoryService {
     @Autowired
-    AppUserService appUserService;
+    private CategoryRepository categoryRepository;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    CategoryRepository categoryRepository;
+    private VocabularyService vocabularyService;
 
     public List<Category> getAllCategories(String email) {
         return categoryRepository.findAllByCreatorEmail(email);
@@ -28,7 +27,7 @@ public class CategoryService {
 
     public Category getACategory(String categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Can't find note."));
+                .orElseThrow(() -> new NotFoundException("Can't find category."));
     }
 
     public Category createACategory(String email, String categoryName) {
@@ -50,6 +49,8 @@ public class CategoryService {
 
     public void deleteCategory(String categoryId) {
         Category category = getACategory(categoryId);
+        for (String vocabularyId : category.getVocabularies())
+            vocabularyService.deleteVocabulary(vocabularyId);
         categoryRepository.delete(category);
     }
 

@@ -12,5 +12,5 @@ public class Vocabulary {
     String word;
     String definition;
     Integer rankLV;  //(0~3) → default 0
-    String creatorEmail;
+    String parentCategory;
 }
