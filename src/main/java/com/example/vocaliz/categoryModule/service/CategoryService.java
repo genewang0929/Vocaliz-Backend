@@ -1,12 +1,14 @@
 package com.example.vocaliz.categoryModule.service;
 
 import com.example.vocaliz.categoryModule.entity.*;
+import com.example.vocaliz.exception.*;
 import com.example.vocaliz.repository.*;
 import com.example.vocaliz.userModule.entity.*;
 import com.example.vocaliz.userModule.service.*;
 import com.example.vocaliz.vocabularyModule.entity.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.crossstore.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -17,65 +19,38 @@ public class CategoryService {
     AppUserService appUserService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     public List<Category> getAllCategories(String email) {
-        AppUser appUser = appUserService.getUserByEmail(email);
-        return appUser.getCategory();
+        return categoryRepository.findAllByCreatorEmail(email);
     }
 
-    public Category getACategory(String email, String categoryId) {
-        AppUser appUser = appUserService.getUserByEmail(email);
-        List<Category> categories = appUser.getCategory();
-        for (Category category : categories) {
-            if (category.getCategoryId().equals(categoryId))
-                return category;
-        }
-        return null;
+    public Category getACategory(String categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Can't find note."));
     }
 
     public Category createACategory(String email, String categoryName) {
-        AppUser appUser = appUserService.getUserByEmail(email);
-        List<Vocabulary> vocabulary = new ArrayList<>();
-        List<Category> categories = appUser.getCategory();
+        //TODO: add error message
+        if (categoryRepository.existsByCategoryNameAndCreatorEmail(categoryName, email))
+            return null;
         Category category = new Category();
-        category.setCategoryId(new ObjectId().toString());
         category.setCategoryName(categoryName);
-        category.setVocabulary(vocabulary);
-        categories.add(category);
-        appUser.setCategory(categories);
-        userRepository.save(appUser);
-        return category;
+        category.setVocabularies(new ArrayList<>());
+        category.setCreatorEmail(email);
+        return categoryRepository.insert(category);
     }
 
-    public Category renameCategory(String email, String categoryId, String newCategoryName) {
-        AppUser appUser = appUserService.getUserByEmail(email);
-        List<Category> categories = appUser.getCategory();
-        for (int i = 0; i < categories.size(); i++) {
-            Category category = categories.get(i);
-            if (category.getCategoryId().equals(categoryId)) {
-                category.setCategoryName(newCategoryName);
-                categories.set(i, category);
-                appUser.setCategory(categories);
-                userRepository.save(appUser);
-                return category;
-            }
-        }
-
-        return null;
+    public Category renameCategory(String categoryId, String newCategoryName) {
+        Category category = getACategory(categoryId);
+        category.setCategoryName(newCategoryName);
+        return categoryRepository.save(category);
     }
 
-    public List<Category> deleteCategory(String email, String categoryId) {
-        AppUser appUser = appUserService.getUserByEmail(email);
-        List<Category> categories = appUser.getCategory();
-        for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).getCategoryId().equals(categoryId)) {
-                categories.remove(i);
-                break;
-            }
-        }
-        appUser.setCategory(categories);
-        userRepository.save(appUser);
-        return categories;
+    public void deleteCategory(String categoryId) {
+        Category category = getACategory(categoryId);
+        categoryRepository.delete(category);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.vocaliz.userModule.service;
 
 import com.example.vocaliz.categoryModule.entity.*;
+import com.example.vocaliz.categoryModule.service.*;
 import com.example.vocaliz.repository.*;
 import com.example.vocaliz.userModule.entity.*;
 import com.example.vocaliz.verificationModule.service.*;
@@ -17,6 +18,8 @@ import java.util.*;
 public class AppUserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CategoryService categoryService;
 //    @Autowired
 //    @Lazy(value = true)
 //    private MailService mailService = new MailService();
@@ -50,17 +53,11 @@ public class AppUserService {
         appUser.setPassword(passwordEncoder.encode(request.getPassword()));
         appUser.setVerifyCode(randomCode());
         appUser.setIsActivate(false);
-        List<Vocabulary> vocabulary = new ArrayList<>();
-        List<Category> categories = new ArrayList<>();
-        Category category = new Category();
-        category.setCategoryName("Default");
-        category.setVocabulary(vocabulary);
-        categories.add(category);
-        appUser.setCategory(categories);
-        userRepository.insert(appUser);
 
-        appUser = getUserById(appUser.getUserId());
-        return appUser;
+        // 建Default資料夾
+        categoryService.createACategory(request.getEmail(), "Default");
+
+        return userRepository.insert(appUser);
     }
 
     public AppUser replaceUser(AppUser request) {
