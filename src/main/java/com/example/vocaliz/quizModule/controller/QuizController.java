@@ -17,8 +17,9 @@ public class QuizController {
     @GetMapping("/{email}/{categoryId}")
     public ResponseEntity<Object> getQuizVocabularies(@PathVariable("email") String email,
                                                       @PathVariable("categoryId") String categoryId,
-                                                      @RequestParam(value = "rankLV", defaultValue = "") int rankLV) {
-        List<Vocabulary> vocabulary = quizService.getQuizVocabularies(email, categoryId, rankLV);
+                                                      @RequestParam(value = "rankLV", defaultValue = "") String rankLV,
+                                                      @RequestParam(value = "wordNum", defaultValue = "") String wordNum) {
+        List<Vocabulary> vocabulary = quizService.getQuizVocabularies(email, categoryId, rankLV, wordNum);
         Map<String, Object> map = new HashMap<>();
         map.put("vocabulary", Objects.requireNonNullElse(vocabulary, "word not found"));
         return ResponseEntity.ok(map);

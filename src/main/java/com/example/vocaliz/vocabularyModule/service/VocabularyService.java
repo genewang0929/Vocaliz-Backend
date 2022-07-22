@@ -45,6 +45,10 @@ public class VocabularyService {
         return new Pages(page.getContent(), page.getTotalPages());
     }
 
+    public List<Vocabulary> getAllVocabularies(String email, String categoryId) {
+        Category category = categoryService.getACategory(email, categoryId);
+        return category.getVocabulary();
+    }
 
     public Pages getVocabulariesByRankLV(String email, String categoryId, int rankLV, int offset, int pageNumber) {
         Category category = categoryService.getACategory(email, categoryId);
@@ -61,6 +65,13 @@ public class VocabularyService {
         return new Pages(page.getContent(), page.getTotalPages());
     }
 
+    public List<Vocabulary> getVocabulariesByRankLV(String email, String categoryId, int rankLV) {
+        Category category = categoryService.getACategory(email, categoryId);
+        List<Vocabulary> vocabularyListLV = category.getVocabulary();
+        return vocabularyListLV.stream()
+                .filter((Vocabulary v) -> v.getRankLV() == rankLV)
+                .collect(Collectors.toList());
+    }
 
     public Vocabulary createVocabulary(String email, String categoryId, Vocabulary request) {
         AppUser appUser = appUserService.getUserByEmail(email);
