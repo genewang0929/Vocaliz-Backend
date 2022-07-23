@@ -43,10 +43,11 @@ public class VocalularyController {
         return ResponseEntity.ok(map);
     }
 
-    @PostMapping("/word/{categoryId}")
-    public ResponseEntity<Object> createAVocabulary(@PathVariable("categoryId") String categoryId,
+    @PostMapping("/word/{email}/{categoryId}")
+    public ResponseEntity<Object> createAVocabulary(@PathVariable("email") String email,
+                                                    @PathVariable("categoryId") String categoryId,
                                                     @RequestBody Vocabulary request) {
-        Vocabulary vocabulary = vocabularyService.createVocabulary(categoryId, request);
+        Vocabulary vocabulary = vocabularyService.createVocabulary(email, categoryId, request);
         Map<String, Object> map = new HashMap<>();
         map.put("vocabulary", vocabulary);
         return ResponseEntity.ok(map);

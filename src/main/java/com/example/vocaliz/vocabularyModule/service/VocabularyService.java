@@ -51,13 +51,14 @@ public class VocabularyService {
         return vocabularyRepository.findAllByRankLVAndParentCategory(rankLV, categoryId);
     }
 
-    public Vocabulary createVocabulary(String categoryId, Vocabulary request) {
+    public Vocabulary createVocabulary(String email, String categoryId, Vocabulary request) {
         Vocabulary vocabulary = new Vocabulary();
         vocabulary.setVocabularyId(new ObjectId().toString());
         vocabulary.setWord(request.getWord());
         vocabulary.setDefinition(request.getDefinition());
         vocabulary.setRankLV(0);
         vocabulary.setParentCategory(categoryId);
+        vocabulary.setCreatorEmail(email);
 
         Category category = categoryService.getACategory(categoryId);
         List<String> vocabularies = category.getVocabularies();
