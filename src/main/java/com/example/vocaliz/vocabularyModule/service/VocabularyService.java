@@ -73,7 +73,6 @@ public class VocabularyService {
         Vocabulary vocabulary = getAVocabulary(wordId);
         vocabulary.setWord(request.getWord());
         vocabulary.setDefinition(request.getDefinition());
-        vocabulary.setRankLV(request.getRankLV());
         return vocabularyRepository.save(vocabulary);
     }
 
