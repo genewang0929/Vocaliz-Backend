@@ -32,7 +32,7 @@ public class VocabularyService {
     }
 
     public Pages getAllVocabulariesInCategory(String categoryId, int offset, int pageNumber) {
-        PageRequest pageRequest = PageRequest.of(offset, pageNumber, Sort.by("word").descending());
+        PageRequest pageRequest = PageRequest.of(offset, pageNumber);
         Page<Vocabulary> vocabularies = vocabularyRepository.findAllByParentCategory(categoryId, pageRequest);
         return new Pages(vocabularies.getContent(), vocabularies.getTotalPages());
     }
@@ -42,7 +42,7 @@ public class VocabularyService {
     }
 
     public Pages getVocabulariesByRankLVInCategory(String categoryId, int rankLV, int offset, int pageNumber) {
-        PageRequest pageRequest = PageRequest.of(offset, pageNumber, Sort.by("word").descending());
+        PageRequest pageRequest = PageRequest.of(offset, pageNumber);
         Page<Vocabulary> vocabularies = vocabularyRepository.findAllByRankLVAndParentCategory(rankLV, categoryId, pageRequest);
         return new Pages(vocabularies.getContent(), vocabularies.getTotalPages());
     }

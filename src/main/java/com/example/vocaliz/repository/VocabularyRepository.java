@@ -9,7 +9,7 @@ import java.util.*;
 
 public interface VocabularyRepository extends MongoRepository<Vocabulary, String> {
     @Query(value = "{'word': {$regex : ?0, $options: 'i'}}")
-    List<Vocabulary> findByWordRegex(String word, Sort sort);
+    List<Vocabulary> findByWordRegex(String word);
     List<Vocabulary> findAllByParentCategory(String categoryId);
     Page<Vocabulary> findAllByParentCategory(String categoryId, Pageable pageable);
     List<Vocabulary> findAllByRankLVAndParentCategory(int rankLV, String categoryId);

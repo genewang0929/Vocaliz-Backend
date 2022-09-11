@@ -18,12 +18,12 @@ public class SearchService {
         if (word.equals(""))
             return null;
 
-        List<Vocabulary> vocabularyList = vocabularyRepository.findByWordRegex(word, Sort.by("word").descending());
+        List<Vocabulary> vocabularyList = vocabularyRepository.findByWordRegex(word);
         vocabularyList = vocabularyList.stream()
                 .filter((Vocabulary v) -> v.getCreatorEmail().equals(email))
                 .collect(Collectors.toList());
 
-        Pageable paging = PageRequest.of(offset, pageNumber, Sort.by("word").descending());
+        Pageable paging = PageRequest.of(offset, pageNumber);
         int start = Math.min((int)paging.getOffset(), vocabularyList.size());
         int end = Math.min((start + paging.getPageSize()), vocabularyList.size());
         Page<Vocabulary> page = new PageImpl<>(vocabularyList.subList(start, end), paging, vocabularyList.size());
