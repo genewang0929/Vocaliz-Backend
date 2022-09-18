@@ -81,5 +81,9 @@ public class AppUserService {
         return new String(chars);
     }
 
-
+    public void replacePassword(String email, String genRandomPassword) {
+        AppUser user = getUserByEmail(email);
+        user.setPassword(passwordEncoder.encode(genRandomPassword));
+        replaceUser(user);
+    }
 }
