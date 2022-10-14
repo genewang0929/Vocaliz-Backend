@@ -57,12 +57,12 @@ public class QuizTest {
         request_1.setDefinition("字");
         request_1.setRankLV(2);
         request_1 = createVocabularyWithLV(appUser.getEmail(), category.getCategoryId(), request_1);
-        Vocabulary request_2 = new Vocabulary();
-        request_2.setVocabularyId(new ObjectId().toString());
-        request_2.setWord("dinosaur");
-        request_2.setDefinition("恐龍");
-        request_2.setRankLV(2);
-        request_2 = createVocabularyWithLV(appUser.getEmail(), category.getCategoryId(), request_2);
+//        Vocabulary request_2 = new Vocabulary();
+//        request_2.setVocabularyId(new ObjectId().toString());
+//        request_2.setWord("dinosaur");
+//        request_2.setDefinition("恐龍");
+//        request_2.setRankLV(2);
+//        request_2 = createVocabularyWithLV(appUser.getEmail(), category.getCategoryId(), request_2);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/quizWords/" + category.getCategoryId())
@@ -79,12 +79,12 @@ public class QuizTest {
                 .andExpect(jsonPath("$.vocabulary.[0].rankLV").value(request_1.getRankLV()))
                 .andExpect(jsonPath("$.vocabulary.[0].parentCategory").value(request_1.getParentCategory()))
                 .andExpect(jsonPath("$.vocabulary.[0].creatorEmail").value(appUser.getEmail()))
-                .andExpect(jsonPath("$.vocabulary.[1].vocabularyId").hasJsonPath())
-                .andExpect(jsonPath("$.vocabulary.[1].word").value(request_2.getWord()))
-                .andExpect(jsonPath("$.vocabulary.[1].definition").value(request_2.getDefinition()))
-                .andExpect(jsonPath("$.vocabulary.[1].rankLV").value(request_2.getRankLV()))
-                .andExpect(jsonPath("$.vocabulary.[1].parentCategory").value(request_2.getParentCategory()))
-                .andExpect(jsonPath("$.vocabulary.[0].creatorEmail").value(appUser.getEmail()))
+//                .andExpect(jsonPath("$.vocabulary.[1].vocabularyId").hasJsonPath())
+//                .andExpect(jsonPath("$.vocabulary.[1].word").value(request_2.getWord()))
+//                .andExpect(jsonPath("$.vocabulary.[1].definition").value(request_2.getDefinition()))
+//                .andExpect(jsonPath("$.vocabulary.[1].rankLV").value(request_2.getRankLV()))
+//                .andExpect(jsonPath("$.vocabulary.[1].parentCategory").value(request_2.getParentCategory()))
+//                .andExpect(jsonPath("$.vocabulary.[1].creatorEmail").value(appUser.getEmail()))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
     }
 
