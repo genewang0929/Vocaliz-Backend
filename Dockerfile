@@ -6,9 +6,9 @@ WORKDIR /project
 
 FROM openjdk:11
 
-EXPOSE 8080
-
+RUN mkdir /app
 COPY  --from=build /project/target/Vocaliz-0.0.1-SNAPSHOT.jar /app/Vocaliz-0.0.1-SNAPSHOT.jar
 WORKDIR /app
 
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "Vocaliz-0.0.1-SNAPSHOT.jar"]
