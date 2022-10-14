@@ -20,9 +20,9 @@ public class AppUserService {
     private UserRepository userRepository;
     @Autowired
     private CategoryService categoryService;
-//    @Autowired
-//    @Lazy(value = true)
-//    private MailService mailService = new MailService();
+    @Autowired
+    @Lazy(value = true)
+    private MailService mailService = new MailService();
     private BCryptPasswordEncoder passwordEncoder;
 
     public AppUserService(UserRepository userRepository) {
@@ -51,8 +51,11 @@ public class AppUserService {
         appUser.setEmail(request.getEmail());
         appUser.setName(request.getName());
         appUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        appUser.setVerifyCode(randomCode());
         appUser.setIsActivate(false);
+        // send code
+        String code = randomCode();
+        appUser.setVerifyCode(code);
+        mailService.sendEmailToUser(request.getEmail(), "Vocaliz verification code" , code);
 
         // 建Default資料夾
         categoryService.createACategory(request.getEmail(), "Default");
