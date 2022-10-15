@@ -1,5 +1,6 @@
 package com.example.vocaliz.verificationModule.config;
 
+import com.example.vocaliz.verificationModule.filter.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
@@ -18,7 +19,11 @@ import java.util.*;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    @Lazy
     private UserDetailsService userDetailsService;
+    @Autowired
+    @Lazy
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Override // setting the rules of API's authentication
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,11 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // authorizeRequests 方法開始自訂授權規則。使用 antMatchers 方法，傳入 HTTP 請求方法與 API 路徑，後面接著授權方式，
         http
                 .authorizeHttpRequests()
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/user").permitAll()
 //                .anyRequest().authenticated() // anyRequest(): 對剩下的 API 定義規則
-                .antMatchers(HttpMethod.POST, "/verification").permitAll()
-                .antMatchers(HttpMethod.POST, "/verification/parse").permitAll()
+//                .antMatchers(HttpMethod.POST, "/verification/login").permitAll()
+//                .antMatchers(HttpMethod.POST, "/verification/signup").permitAll()
+//                .antMatchers(HttpMethod.POST, "/verification/parse").permitAll()
                 .anyRequest().permitAll() // tmp for testing
                 .and()
                 .csrf().disable()
@@ -65,11 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return super.userDetailsService();
     }
 }
 

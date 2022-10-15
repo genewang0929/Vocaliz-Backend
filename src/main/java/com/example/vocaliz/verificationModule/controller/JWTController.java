@@ -51,7 +51,7 @@ public class JWTController {
     }
 
 //    @Operation(summary = "登入", description = "")
-    @PostMapping("/login")
+    @PostMapping("/login")  // status code 404 -> 已註冊, status code 403 -> 密碼錯誤
     public ResponseEntity<Map<String, Object>> issueToken(@Valid @RequestBody AuthRequest request) {
         if (appUserService.hasExitUserByEmail(request.getEmail())) {
             String token = jwtService.generateToken(request);
