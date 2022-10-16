@@ -8,8 +8,10 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.http.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.security.web.authentication.*;
 import org.springframework.web.cors.*;
 
 import java.util.*;
@@ -34,11 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // authorizeRequests 方法開始自訂授權規則。使用 antMatchers 方法，傳入 HTTP 請求方法與 API 路徑，後面接著授權方式，
         http
                 .authorizeHttpRequests()
-//                .anyRequest().authenticated() // anyRequest(): 對剩下的 API 定義規則
-//                .antMatchers(HttpMethod.POST, "/verification/login").permitAll()
-//                .antMatchers(HttpMethod.POST, "/verification/signup").permitAll()
-//                .antMatchers(HttpMethod.POST, "/verification/parse").permitAll()
-                .anyRequest().permitAll() // tmp for testing
+                .antMatchers(HttpMethod.POST, "/verification/**").permitAll()
+//                .anyRequest().permitAll() // tmp for testing
+                // JWT Token Bearer
+                .anyRequest().authenticated() // 對剩下的 API 定義規則
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
                 .cors().and();
