@@ -6,5 +6,6 @@ import lombok.*;
 public class SearchReturn {
     String word;
     String definition;
+    String parentCategoryId;
     String parentCategoryName;
 }
