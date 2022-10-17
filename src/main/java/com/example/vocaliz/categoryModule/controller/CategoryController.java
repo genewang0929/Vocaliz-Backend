@@ -55,4 +55,13 @@ public class CategoryController {
         categoryService.deleteCategory(categoryId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/getCategoryByName/{email}/{categoryName}")
+    public ResponseEntity<Object> getCategoryByName(@PathVariable("email") String email,
+                                                    @PathVariable("categoryName") String categoryName) {
+        Category category = categoryService.getACategoryByName(categoryName, email);
+        Map<String, Object> map = new HashMap<>();
+        map.put("category", Objects.requireNonNullElse(category, "category not found"));
+        return ResponseEntity.ok(map);
+    }
 }
