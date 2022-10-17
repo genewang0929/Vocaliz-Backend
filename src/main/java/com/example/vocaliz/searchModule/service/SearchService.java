@@ -34,6 +34,7 @@ public class SearchService {
             searchReturn.setWord(vocabulary.getWord());
             searchReturn.setDefinition(vocabulary.getDefinition());
             Category category = categoryService.getACategory(vocabulary.getParentCategory());
+            searchReturn.setParentCategoryId(category.getCategoryId());
             searchReturn.setParentCategoryName(category.getCategoryName());
             searchReturnList.add(searchReturn);
         }
