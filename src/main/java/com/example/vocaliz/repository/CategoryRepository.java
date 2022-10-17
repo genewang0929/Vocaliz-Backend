@@ -7,5 +7,6 @@ import java.util.*;
 
 public interface CategoryRepository extends MongoRepository<Category, String> {
     List<Category> findAllByCreatorEmail(String email);
+    Category findByCategoryNameAndCreatorEmail(String categoryName, String email);
     Boolean existsByCategoryNameAndCreatorEmail(String categoryName, String email);
 }

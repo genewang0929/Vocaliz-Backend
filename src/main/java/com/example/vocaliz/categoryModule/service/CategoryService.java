@@ -30,6 +30,10 @@ public class CategoryService {
                 .orElseThrow(() -> new NotFoundException("Can't find category."));
     }
 
+    public Category getACategoryByName(String categoryName, String email) {
+        return categoryRepository.findByCategoryNameAndCreatorEmail(categoryName, email);
+    }
+
     public Category createACategory(String email, String categoryName) {
         //TODO: add error message
         if (categoryRepository.existsByCategoryNameAndCreatorEmail(categoryName, email))
