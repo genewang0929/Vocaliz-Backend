@@ -43,10 +43,6 @@ public class AppUserService {
     }
 
     public AppUser createUser(AppUser request) {
-        // check email has existed
-        if (hasExitUserByEmail(request.getEmail())) {
-            return null;
-        }
         AppUser appUser = new AppUser();
         appUser.setEmail(request.getEmail());
         appUser.setName(request.getName());
@@ -88,5 +84,9 @@ public class AppUserService {
         AppUser user = getUserByEmail(email);
         user.setPassword(passwordEncoder.encode(genRandomPassword));
         replaceUser(user);
+    }
+
+    public List<AppUser> getAllUsers() {
+        return userRepository.findAll();
     }
 }
